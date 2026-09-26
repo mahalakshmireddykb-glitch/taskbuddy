@@ -223,3 +223,14 @@
     padding: 0 10px 20px;
   }
 }
+.progress-percent {
+  color: #f5a623;
+  font-weight: bold;
+  margin-top: 5px;
+}
+
+.progress-points {
+  color: #888;
+  font-size: 0.85rem;
+  margin-top: 5px;
+}
