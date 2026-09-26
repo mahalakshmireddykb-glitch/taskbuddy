@@ -37,14 +37,37 @@ function App() {
     setTasks([]);
   }
 
-  const completedTasks = tasks.filter(
-    (task) => task.completed
-  ).length;
+  // Priority weights
+const priorityWeight = {
+  High: 3,
+  Medium: 2,
+  Low: 1,
+};
 
-  const progress =
-    tasks.length === 0
-      ? 0
-      : Math.round((completedTasks / tasks.length) * 100);
+// Total priority points of all tasks
+const totalWeight = tasks.reduce(
+  (sum, task) => sum + (priorityWeight[task.priority] || 0),
+  0
+);
+
+// Priority points of completed tasks
+const completedWeight = tasks
+  .filter((task) => task.completed)
+  .reduce(
+    (sum, task) => sum + (priorityWeight[task.priority] || 0),
+    0
+  );
+
+// Calculate progress percentage
+const progress =
+  totalWeight === 0
+    ? 0
+    : Math.round((completedWeight / totalWeight) * 100);
+
+// Normal task count
+const completedTasks = tasks.filter(
+  (task) => task.completed
+).length;
 
   return (
     <div className="app">
@@ -60,21 +83,25 @@ function App() {
         <TaskForm onAddTask={addTask} />
 
         <div className="progress-section">
-          <div className="progress-text">
-            {completedTasks} of {tasks.length} tasks completed
-          </div>
+  <div className="progress-text">
+    {completedTasks} of {tasks.length} tasks completed
+  </div>
 
-          <div className="progress-bar">
-            <div
-              className="progress-fill"
-              style={{ width: `${progress}%` }}
-            ></div>
-          </div>
+  <div className="progress-percentage">
+    Progress: {progress}%
+  </div>
 
-          <div className="progress-percentage">
-            {progress}%
-          </div>
-        </div>
+  <div className="progress-bar">
+    <div
+      className="progress-fill"
+      style={{ width: `${progress}%` }}
+    ></div>
+  </div>
+
+  <div className="progress-points">
+    Completed Priority Points: {completedWeight} / {totalWeight}
+  </div>
+</div>
 
         {tasks.length > 0 && (
           <div className="clear-section">
